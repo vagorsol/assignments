@@ -5,7 +5,7 @@ repeat : repeat.c
 	gcc repeat.c -o repeat
 
 wordguess : wordguess.c
-	gcc wordguess.c -o wordguess
+	gcc -g wordguess.c -o wordguess
 
 all: dynamic_snackbar repeat wordguess
 	
