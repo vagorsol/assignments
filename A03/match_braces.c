@@ -151,5 +151,6 @@ int main(int argc, char* argv[]) {
   }
 
   clear(top); 
+  fclose(infile);
   return 0;
 }

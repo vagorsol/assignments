@@ -12,7 +12,6 @@
 // the column (2), or the diagonal (3)
 // row: start row coor, col: start column coor
 // len: length (dimensions) of the array
-// TODO: fix the memory leaks here and in clear()
 int lineSum(int row, int col, int len, int dir, int **arr){
   int ret;
   ret = 0;
@@ -56,8 +55,6 @@ int main() {
   int innit; 
   
   // get the size of the matrix
-  // TODO ask aline how tf the matrix files are formatted
-  scanf(" %d", &rows);
   scanf(" %d", &columns);
 
   // allocate space for the matrix 
