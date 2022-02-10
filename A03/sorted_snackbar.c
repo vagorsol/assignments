@@ -2,7 +2,7 @@
 // sorted_snackbar.c 
 // CS223 - Spring 2022
 // Ask the user for a list of snacks and store them in alphabetical order
-// Name:
+// Name: Audrey Yang
 //
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,17 +24,154 @@ struct snack {
 // Returns the first item in the list
 struct snack* insert_sorted(struct snack* snacks, 
   const char* name, int quantity, float cost) {
+  // make the new node to add
+  struct snack* snackNode = malloc(sizeof(struct snack));
+  if(snackNode == NULL){
+    printf("ERROR: Out of space!\n");
+    exit(1);
+  }  
 
-  // todo
-  return NULL;
+  // add things to the new node
+  strcpy(snackNode->name, name);
+  snackNode->quantity = quantity;
+  snackNode->cost = cost; 
+
+  // for inserting nodes
+  int insertedQ = 0; // bool value to keep track of if its inserted yet
+  struct snack* prevNode; // = malloc(sizeof(struct snack));
+  struct snack* currNode; //= malloc(sizeof(struct snack)); 
+  struct snack* tempPtr; // = malloc(sizeof(struct snack));
+  /*if(prevNode == NULL || currNode == NULL || tempPtr == NULL){
+    // this is bad practice but i don't feel like writing 4 consecutive
+    // malloc checking statements
+    printf("ERROR: Out of space!\n");
+    exit(1);
+  } */ 
+
+  // initialize nodes as the start
+  prevNode = snacks;
+  currNode = snacks;
+  tempPtr = snacks;
+  
+  if(snacks == NULL){
+    // for the first snack, just make it the head
+    snackNode->next = NULL;
+    insertedQ = 2;  
+  } else {
+    // otherwise: insert sort 
+  
+    while(insertedQ == 0){
+      if(currNode == NULL){
+        // if hit end, just plug it in
+        prevNode->next = snackNode; 
+        snackNode->next = NULL;
+        insertedQ = 1;
+      } else if(strcmp(snackNode->name, currNode->name) < 0){
+        if(currNode != snacks){
+          // if the snackNode is alphabetically before currNode, insert there
+          tempPtr = currNode;
+          prevNode->next = snackNode;
+          snackNode->next = tempPtr;
+          insertedQ = 1;
+        } else { 
+          // specific case for if it's replacing the starting node
+          snackNode->next = snacks; 
+          insertedQ = 2;
+        }
+      } else{
+        // move along the list
+        prevNode = currNode;
+        currNode = currNode->next;
+      }
+    } 
+  }
+  // printf("line 84\n");
+  // free things ft. doing weird things to not double free things 
+  // free(tempPtr);
+  tempPtr = NULL;   
+  // free(currNode);
+  currNode = NULL;
+  // free(prevNode);
+  prevNode = NULL;
+  // printf("Q: %d\n", insertedQ);
+  if(insertedQ == 1){
+    return snacks;
+  } else if (insertedQ == 2){
+    return snackNode;
+  } else{
+    return NULL;
+  }
 }
 
 // Delete (e.g. free) all nodes in the given list of snacks
 // Param snacks: the first node in the list (NULL if empty)
 void clear(struct snack* snacks) {
+  if(snacks != NULL){
+    struct snack *next;
+    next; // = malloc(sizeof(struct snack));
+    /*(if(next == NULL){
+      printf("ERROR: failure to allocat space\n");
+      exit(1); 
+    } */
+    next = snacks->next;
+    free(snacks);
+    snacks = NULL;
+    clear(next);
+  }
 }
 
 int main() {
+  int numberOfSnacks; // number of snacks
+  struct snack *snackStart; // first snack in the list
+  
+  // initliaze the first snack to nothing
+  snackStart = NULL;  
+
+  // snack details
+  char snackName[32];
+  int snackQuantity;
+  float snackCost;  
+
+  printf("Enter a number of snacks: ");
+  scanf(" %d", &numberOfSnacks);
+
+  for(int i = 0; i < numberOfSnacks; i++){
+    // get snack info
+    printf("Enter a name: ");
+    scanf("%32s", snackName);
+    printf("Enter a cost: ");
+    scanf("%f", &snackCost);
+    printf("Enter a quantity: ");
+    scanf(" %d", &snackQuantity);
+
+    // store and sort snack
+    snackStart = insert_sorted(snackStart, snackName, snackQuantity, snackCost);
+  }
+  
+  printf("\nWelcome to THE SORT SNHCNAK BAR!\n\n");
+  
+  // probably could have just used snackStart
+  // but wanted to be safe with messing with values  
+  struct snack* tempPtr;
+  tempPtr; //= malloc(sizeof(struct snack));
+  /*if(tempPtr == NULL){
+    printf("ERROR: Out of space!\n");
+    exit(1);
+  }*/ 
+  tempPtr = snackStart;
+
+  // print out all the snacks
+  for(int i = 0; i < numberOfSnacks; i++){
+    printf("%d) %s\t cost: $%.2f\t quantity: %d\n",
+            i,
+            tempPtr->name,
+            tempPtr->cost,
+            tempPtr->quantity); 
+    tempPtr = tempPtr->next;
+  }
+  
+  clear(snackStart);
+  // free(tempPtr);
+  tempPtr = NULL; 
   return 0;
 }
-
