@@ -17,25 +17,29 @@ int main() {
 
   // get the word
   printf("Enter a word: ");
-  scanf("%32s", userWord); // also am hard capping length @ 32 char here
+  scanf(" %32s", userWord); // also am hard capping length @ 32 char here
   // get the number of repeats
   printf("Enter a count: ");
-  scanf("%d",& itt);
+  scanf(" %d",& itt);
   
   // get the size of the string to repeat
-  size = strlen(userWord);
+  size = strlen(userWord) + 1;
+  userWord[size] = '\0';
+  // printf("%s\n", userWord);
 
   // allocate space/size for the repeated word
   wordRepeated = malloc(sizeof(char) * size * itt); 
-  // if the user wants to repeat the word too many times for compiler to handle
-  // or if allocating failed, error message
-  if(wordRepeated == NULL){
+  if(wordRepeated == NULL){ 
+    // if the user wants to repeat the word too many times for compiler to handle
+    // or if allocating failed, error message
     printf("Cannot allocate new string. Exiting...\n");
     exit(1);
   }
-  
+
+  // initialize wordRepeated
+  strcpy(wordRepeated, userWord);
   // making the repeated word string
-  for(int i = 0; i < itt; i++){
+  for(int i = 0; i < itt - 1; i++){
     // append the word to the string of the word repeated
     strncat(wordRepeated, userWord, size); 
   }
