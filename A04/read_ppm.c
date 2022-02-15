@@ -29,7 +29,7 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
     fgets(c, 100, infile); 
     if(c[0] != '#'){
       if(count == 1){
-        printf("%s\n",c);
+        // printf("%s\n",c);
         // get the dimensions of the picture
         *w = atoi(strtok(c," "));
         *h = atoi(strtok(NULL," ")); // null to get the next token 

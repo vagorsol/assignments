@@ -23,8 +23,8 @@ int main() {
   printf("Testing file feep-ascii.ppm: %d %d\n", width, height);
   
   int indx; 
-  for(int i = 0; i < width; i++){
-    for(int j = 0; j < height; j++){
+  for(int i = 0; i < height; i++){
+    for(int j = 0; j < width; j++){
       indx = i * height + j;
       printf("(%hhu, %hhu, %hhu) ", 
               pixels[indx].red, 
