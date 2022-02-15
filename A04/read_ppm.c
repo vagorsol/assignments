@@ -24,16 +24,16 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
  
   // read header
   int count = 0;
-  char c[32]; // char read in
-  // also. ask if w/h have to be on the same LINE
+  char c[100]; // char read in, should be large enough if not well. 
   while(count < 3){
-    fgets(c, 32, infile); 
+    fgets(c, 100, infile); 
     if(c[0] != '#'){
       if(count == 1){
+        printf("%s\n",c);
         // get the dimensions of the picture
-        *w = atoi(&c[0]);
-        *h = atoi(&c[2]);
-      } 
+        *w = atoi(strtok(c," "));
+        *h = atoi(strtok(NULL," ")); // null to get the next token 
+      }  
       count++;
     }
     // else: if the line is a comment, basically ignore it
