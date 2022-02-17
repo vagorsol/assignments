@@ -55,8 +55,9 @@ int main() {
   int innit; 
   
   // get the size of the matrix
+  scanf(" %d", &rows);
   scanf(" %d", &columns);
-
+ 
   // allocate space for the matrix 
   matrix = malloc(sizeof(int *) * rows);
   if(matrix == NULL){
