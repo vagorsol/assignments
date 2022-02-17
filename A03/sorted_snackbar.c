@@ -38,15 +38,9 @@ struct snack* insert_sorted(struct snack* snacks,
 
   // for inserting nodes
   int insertedQ = 0; // bool value to keep track of if its inserted yet
-  struct snack* prevNode; // = malloc(sizeof(struct snack));
-  struct snack* currNode; //= malloc(sizeof(struct snack)); 
-  struct snack* tempPtr; // = malloc(sizeof(struct snack));
-  /*if(prevNode == NULL || currNode == NULL || tempPtr == NULL){
-    // this is bad practice but i don't feel like writing 4 consecutive
-    // malloc checking statements
-    printf("ERROR: Out of space!\n");
-    exit(1);
-  } */ 
+  struct snack* prevNode; 
+  struct snack* currNode;
+  struct snack* tempPtr; 
 
   // initialize nodes as the start
   prevNode = snacks;
@@ -85,15 +79,10 @@ struct snack* insert_sorted(struct snack* snacks,
       }
     } 
   }
-  // printf("line 84\n");
   // free things ft. doing weird things to not double free things 
-  // free(tempPtr);
   tempPtr = NULL;   
-  // free(currNode);
   currNode = NULL;
-  // free(prevNode);
   prevNode = NULL;
-  // printf("Q: %d\n", insertedQ);
   if(insertedQ == 1){
     return snacks;
   } else if (insertedQ == 2){
@@ -108,11 +97,7 @@ struct snack* insert_sorted(struct snack* snacks,
 void clear(struct snack* snacks) {
   if(snacks != NULL){
     struct snack *next;
-    next; // = malloc(sizeof(struct snack));
-    /*(if(next == NULL){
-      printf("ERROR: failure to allocat space\n");
-      exit(1); 
-    } */
+    next;
     next = snacks->next;
     free(snacks);
     snacks = NULL;
@@ -153,11 +138,7 @@ int main() {
   // probably could have just used snackStart
   // but wanted to be safe with messing with values  
   struct snack* tempPtr;
-  tempPtr; //= malloc(sizeof(struct snack));
-  /*if(tempPtr == NULL){
-    printf("ERROR: Out of space!\n");
-    exit(1);
-  }*/ 
+  tempPtr;
   tempPtr = snackStart;
 
   // print out all the snacks
@@ -171,7 +152,6 @@ int main() {
   }
   
   clear(snackStart);
-  // free(tempPtr);
   tempPtr = NULL; 
   return 0;
 }
