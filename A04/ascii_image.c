@@ -13,6 +13,10 @@ int main(int argc, char** argv) {
   struct ppm_pixel *pixels;
   int width, height;
   
+  if(argv[1] == NULL){
+    printf("No file to open!\n");
+    exit(1);
+  } 
   pixels = read_ppm(argv[1], &width, &height);
   if(pixels == NULL){
     printf("ERROR: Cannot open the file: %s\n", argv[1]);
