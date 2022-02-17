@@ -90,7 +90,11 @@ void print(struct node* top) {
 
 int main(int argc, char* argv[]) {
   FILE *infile;
-  
+   
+  if(argv[1] == NULL){
+    printf("No file to open!\n");
+    exit(1);
+  }
   // open and read the file  
   infile = fopen(argv[1], "r"); 
   if(infile == NULL){
