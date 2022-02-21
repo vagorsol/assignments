@@ -1,10 +1,17 @@
+/*
+ * read_ppm.c
+ * Author: Audrey Yang
+ * Date: 2/21/2022
+ * An implementation of the read_ppm() and write_ppm() functions from read_ppm.h
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "read_ppm.h"
 
-// Feel free to change the function signature if you prefer to implement an 
-// array of arrays
+// Reads a PPM file in raw (binary) format and returns an array of all the 
+// RGB values of each pixel
 struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
   FILE *infile;
   // check that file can be opened
@@ -15,7 +22,7 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
  
   // read header
   int count = 0;
-  char c[100]; // char read in, should be large enough if not well. 
+  char c[100]; 
   while(count < 3){
     fgets(c, 100, infile); 
     if(c[0] != '#'){
