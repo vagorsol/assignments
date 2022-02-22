@@ -66,15 +66,15 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
   }
 
   // header information
-  char filetype[] = "P6";
+  char filetype[] = "P6\n";
   char *arrsize = NULL;
-  arrsize = malloc(sizeof(int) * 3);
+  arrsize = malloc(sizeof(int) * 4);
   if(arrsize == NULL){
     printf("ERROR: unable to write header.\n");
     exit(1);
   }
-  sprintf(arrsize, "%d %d", w, h);
-  char maxpixval[] = "225";
+  sprintf(arrsize, "%d %d\n", w, h);
+  char maxpixval[] = "225\n";
   
   fwrite(filetype, sizeof(filetype), 1, infile);
   fwrite(arrsize, sizeof(arrsize), 1, infile);
