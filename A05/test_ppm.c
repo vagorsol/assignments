@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
   int indx; 
   for(int i = 0; i < height; i++){
     for(int j = 0; j < width; j++){
-      indx = i * height + j;
+      indx = i * width + j;
       printf("(%hhu, %hhu, %hhu) ", 
               pixels[indx].red, 
               pixels[indx].green,
