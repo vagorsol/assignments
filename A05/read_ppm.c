@@ -10,8 +10,10 @@
 #include <string.h>
 #include "read_ppm.h"
 
-// Reads a PPM file in raw (binary) format and returns an array of all the 
-// RGB values of each pixel
+/*
+ * Reads a PPM file in raw (binary) format and returns an array of all the 
+ * RGB values of each pixel
+ */
 struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
   FILE *infile;
   // check that file can be opened
@@ -49,9 +51,31 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
   return pixels;
 }
 
-// TODO: Implement this function
-// Feel free to change the function signature if you prefer to implement an 
-// array of arrays
+/*
+ * param: filename (file write out to), pxs (array of pixels),
+ * w (width of the file), h (height of the file)
+*/
 extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h) {
-
+  FILE *infile;
+  infile = fopen(filename, "wb");
+  if(infile == NULL){
+    printf("Error: unable to open outfile.\n");
+    exit(1);
+  }
+  // set header information?
+ 
+  // color shift
+  int indx;
+  for(int i = 0; i < h; i++){
+    for(int j = 0; j < w; j++){
+      // seg fault with indexing. how? why? idfk
+      indx = i * w + j;
+      pxs[indx].red = pxs[indx].red << (rand() % 2);
+      pxs[indx].green = pxs[indx].green << (rand() % 2);
+      pxs[indx].blue = pxs[indx].blue << (rand() % 2);
+    }
+  }
+ 
+  fwrite(pxs, sizeof(struct ppm_pixel), w * h, infile);
+  fclose(infile);
 }
