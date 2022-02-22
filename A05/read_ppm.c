@@ -52,6 +52,8 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
 }
 
 /*
+ * Given an array of pixels, make a new PPM file where all the pixels are 
+ * color shifted ("glitched")
  * param: filename (file write out to), pxs (array of pixels),
  * w (width of the file), h (height of the file)
 */
@@ -62,13 +64,26 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
     printf("Error: unable to open outfile.\n");
     exit(1);
   }
-  // set header information?
+
+  // header information
+  char filetype[] = "P6";
+  char *arrsize = NULL;
+  arrsize = malloc(sizeof(int) * 3);
+  if(arrsize == NULL){
+    printf("ERROR: unable to write header.\n");
+    exit(1);
+  }
+  sprintf(arrsize, "%d %d", w, h);
+  char maxpixval[] = "225";
+  
+  fwrite(filetype, sizeof(filetype), 1, infile);
+  fwrite(arrsize, sizeof(arrsize), 1, infile);
+  fwrite(maxpixval, sizeof(maxpixval), 1, infile);
  
   // color shift
   int indx;
   for(int i = 0; i < h; i++){
     for(int j = 0; j < w; j++){
-      // seg fault with indexing. how? why? idfk
       indx = i * w + j;
       pxs[indx].red = pxs[indx].red << (rand() % 2);
       pxs[indx].green = pxs[indx].green << (rand() % 2);
@@ -78,4 +93,6 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
  
   fwrite(pxs, sizeof(struct ppm_pixel), w * h, infile);
   fclose(infile);
+  free(arrsize);
+  arrsize = NULL;
 }
