@@ -67,18 +67,20 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
 
   // header information
   char filetype[] = "P6\n";
-  char *arrsize = NULL;
-  arrsize = malloc(sizeof(int) * 4);
+  char *arrsize;
+  arrsize = malloc(sizeof(int) * 5);
   if(arrsize == NULL){
     printf("ERROR: unable to write header.\n");
     exit(1);
   }
-  sprintf(arrsize, "%d %d\n", w, h);
+  sprintf(arrsize,"%d %d\n", w, h);
   char maxpixval[] = "225\n";
-  
-  fwrite(filetype, sizeof(filetype), 1, infile);
+  // known bug: header makes "^@" appear (apparently vi null character)
+  // how get rid? why there? idk!! and it's breaking my program!!
+  // i can't check shit!! 
+  fwrite(filetype, sizeof(filetype) - 1, 1, infile);
   fwrite(arrsize, sizeof(arrsize), 1, infile);
-  fwrite(maxpixval, sizeof(maxpixval), 1, infile);
+  fwrite(maxpixval, sizeof(maxpixval) - 1, 1, infile);
  
   // color shift
   int indx;
