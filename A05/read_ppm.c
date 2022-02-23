@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "read_ppm.h"
 
 /*
@@ -75,21 +76,25 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
   }
   sprintf(arrsize,"%d %d\n", w, h);
   char maxpixval[] = "225\n";
-  // known bug: header makes "^@" appear (apparently vi null character)
-  // how get rid? why there? idk!! and it's breaking my program!!
-  // i can't check shit!! 
   fwrite(filetype, sizeof(filetype) - 1, 1, infile);
   fwrite(arrsize, sizeof(arrsize), 1, infile);
   fwrite(maxpixval, sizeof(maxpixval) - 1, 1, infile);
- 
+    
+  srand(time(0)); 
   // color shift
   int indx;
   for(int i = 0; i < h; i++){
     for(int j = 0; j < w; j++){
       indx = i * w + j;
+      unsigned int masklow = 0x08;
+      unsigned int maskhigh = 0x80;
+      pxs[indx].red = (pxs[indx].red & masklow);
+      pxs[indx].blue = (pxs[indx].blue ^ maskhigh);
+      // trying to make glitch lines.
       pxs[indx].red = pxs[indx].red << (rand() % 2);
       pxs[indx].green = pxs[indx].green << (rand() % 2);
       pxs[indx].blue = pxs[indx].blue << (rand() % 2);
+      
     }
   }
  
