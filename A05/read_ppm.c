@@ -88,9 +88,22 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
       indx = i * w + j;
       unsigned int masklow = 0x08;
       unsigned int maskhigh = 0x80;
-      pxs[indx].red = (pxs[indx].red & masklow);
-      pxs[indx].blue = (pxs[indx].blue ^ maskhigh);
-      // trying to make glitch lines.
+      unsigned int maskmid = 0x3C;
+
+      // trying to make glitch lines by doing funky things
+      if(j % 3 == 0 && j % 2 == 0){  
+        pxs[indx].red = ~(pxs[indx].red &  masklow);
+        pxs[indx].blue = (pxs[indx].green ^ maskhigh);
+      } else if (i % 5 == 0 && j % 2 == 0){
+        pxs[indx].red = ~pxs[indx].red;
+        pxs[indx].green = (pxs[indx].green & maskmid); 
+      } else if(i % 3 == 0){
+        pxs[indx].green = (pxs[indx].red | maskmid);
+      } else{
+        // this combo makes it blue. i like blue.        
+        pxs[indx].red = (pxs[indx].red & masklow);
+        pxs[indx].blue = (pxs[indx].blue ^ maskhigh);
+      }
       pxs[indx].red = pxs[indx].red << (rand() % 2);
       pxs[indx].green = pxs[indx].green << (rand() % 2);
       pxs[indx].blue = pxs[indx].blue << (rand() % 2);
