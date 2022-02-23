@@ -91,7 +91,7 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
       unsigned int maskmid = 0x3C;
 
       // trying to make glitch lines by doing funky things
-      if(j % 3 == 0 && j % 2 == 0){  
+      if(j > w/2 && (j % 2 == 0 || j % 3 == 0)){  
         pxs[indx].red = ~(pxs[indx].red &  masklow);
         pxs[indx].blue = (pxs[indx].green ^ maskhigh);
       } else if (i % 5 == 0 && j % 2 == 0){
