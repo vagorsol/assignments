@@ -63,7 +63,7 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
   // header information
   char filetype[] = "P6\n";
   char *arrsize;
-  arrsize = malloc(sizeof(int) * 5);
+  arrsize = calloc(5, sizeof(int));
   if(arrsize == NULL){
     printf("ERROR: unable to write header.\n");
     exit(1);

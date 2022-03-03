@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "read_ppm.h"
 
 int main(int argc, char** argv) {
@@ -25,11 +26,12 @@ int main(int argc, char** argv) {
   }
   printf("Reading %s with width %d and height %d\n", argv[1], width, height);
   int maxchar;
-  maxchar = (width * height * 3) /6;
-  printf("Max number of characters in the image: %d\n", maxchar);
-  char msg[maxchar];
+  maxchar = (width * height * 3) / 8;
+  printf("Max number of characters in the image: %d\n", maxchar - 1); 
+  char *msg;
+  msg = calloc(maxchar, sizeof(char));
   printf("Enter a phrase: ");
-  scanf(" %s", msg);
+  fgets(msg, maxchar, stdin); // trims off any excess values
 
   int size = strlen(argv[1]);
   char *outFname = NULL;
@@ -42,10 +44,65 @@ int main(int argc, char** argv) {
   outFname = strtok(outFname, ".");
   strncat(outFname, "-encoded.ppm", size + 13);
   
-  // TODO: actually gotta glitch the array here first before i write it 
+  int *binarr = NULL; // stores the converted binary values
+  binarr = calloc(maxchar * 8, sizeof(int));
+  if(binarr == NULL){
+    printf("ERROR: unable to wrtie secret message!\n");
+    exit(1);
+  }
+
+  // convert secret msg to ascii
+  int msglen = strlen(msg);
+  int itt = 8;
+  // not getting one letter across
+  for(int i = 0; i < msglen; i++){
+    int asciid = msg[i]; // get the int value
+    if(&msg[i] == NULL){
+      break;
+    }
+    // printf("%c", asciid);
+    int remainder = 0;
+    // convert to binary
+    while(asciid != 0){
+      itt--;
+      // printf("binarr[%d]\n",itt);
+      remainder = asciid % 2;
+      binarr[itt] = remainder;
+      asciid = asciid / 2;
+    }
+    itt = (itt + (8 * 2)) - 1;
+  }
+  // printf("\n");
+
+  int indx; // 2d array indexing
+  itt = 0; // indexing along binarr
+
+  // take each least significant bit from each color value
+  // then change it as needed to create the secret message
+  for(int i = 0; i < height; i++){
+    for(int j = 0; j < width; j++){
+      indx = i * width + j; 
+      for(int k = 0; k < 3; k++){
+        if(binarr[itt] == 0){
+          pixels[indx].colors[k] = pixels[indx].colors[k] & ~1;
+        } else{
+          pixels[indx].colors[k] = pixels[indx].colors[k] | 1;
+        }
+        // printf("%d", binarr[itt]);
+        itt++;
+      }
+    }
+  }
+  // printf("\n");
+
   write_ppm(outFname, pixels, width, height);
 
   printf("Writing file %s\n", outFname);
+
+  free(msg);
+  msg = NULL;
+  free(binarr);
+  binarr = NULL;
   free(pixels);
   pixels = NULL;
   free(outFname);
