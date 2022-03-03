@@ -72,10 +72,9 @@ extern void write_ppm(const char* filename, struct ppm_pixel* pxs, int w, int h)
   char maxpixval[] = "225\n";
   fwrite(filetype, sizeof(filetype) - 1, 1, infile);
   fwrite(arrsize, sizeof(arrsize), 1, infile);
-  fwrite(maxpixval, sizeof(maxpixval) - 1, 1, infile);
+  fwrite(maxpixval, sizeof(maxpixval) - 1, 1, infile); 
   
-  // TODO: write here    
- 
+  // add the pixels
   fwrite(pxs, sizeof(struct ppm_pixel), w * h, infile);
   fclose(infile);
   free(arrsize);
