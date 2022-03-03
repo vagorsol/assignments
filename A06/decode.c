@@ -45,17 +45,16 @@ int main(int argc, char** argv) {
     printf("ERROR: unable to write secret message!\n");
     exit(1);
   }
+  
   unsigned int mask = 0x1;
   int indx; // 2d array indexing
   int count = 0; // letter array indexing
+
   // take each least significant bit from each color value
   // then put it in and read 
   for(int i = 0; i < height; i++){
     for(int j = 0; j < width; j++){
       indx = i * width + j; 
-      /*printf("%1X\t%d\n", pixels[indx].red, pixels[indx].red);
-      printf("%1X\t%d\n", pixels[indx].green, pixels[indx].green);
-      printf("%1X\t%d\n", pixels[indx].blue, pixels[indx].blue);*/
 
       // get all the least significant bits
       // the masks are not right. why.
@@ -79,9 +78,8 @@ int main(int argc, char** argv) {
   // read bits, detect null char
   for(int i = 0; i < maxchar * 8; i++){
     if(count == 8){
-      secretmsg[indx] = secretletter;
-      // printf("%d\t%c\n", secretletter, secretmsg[indx]);
-      // add to arr
+      secretmsg[indx] = secretletter; // add to arr
+
       if(secretletter == 0){
         // if null terminator - stop
         break; 
@@ -91,9 +89,8 @@ int main(int argc, char** argv) {
         count = 0;
       }
     } 
-    // printf("Count : %d\t Char: %d\n",count, secretchar[i]);
+    // convert bit to binary and add to current letter
     secretletter = secretletter + (secretchar[i] * powerOf(2,7 - count)); 
-    // printf("Status: %d\n", secretletter);
     count = count + 1;
   }
   printf("%s\n", secretmsg);
