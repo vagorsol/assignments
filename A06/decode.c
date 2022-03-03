@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     printf("ERROR: unable to write secret message!\n");
     exit(1);
   }
-  
+
   unsigned int mask = 0x1;
   int indx; // 2d array indexing
   int count = 0; // letter array indexing
@@ -57,7 +57,6 @@ int main(int argc, char** argv) {
       indx = i * width + j; 
 
       // get all the least significant bits
-      // the masks are not right. why.
       secretchar[count] = mask & pixels[indx].red;
       secretchar[count + 1] = mask & pixels[indx].green;
       secretchar[count + 2] = mask & pixels[indx].blue;
