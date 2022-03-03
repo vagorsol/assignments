@@ -60,19 +60,16 @@ int main(int argc, char** argv) {
     if(&msg[i] == NULL){
       break;
     }
-    // printf("%c", asciid);
     int remainder = 0;
     // convert to binary
     while(asciid != 0){
       itt--;
-      // printf("binarr[%d]\n",itt);
       remainder = asciid % 2;
       binarr[itt] = remainder;
       asciid = asciid / 2;
     }
     itt = (itt + (8 * 2)) - 1;
   }
-  // printf("\n");
 
   int indx; // 2d array indexing
   itt = 0; // indexing along binarr
@@ -88,12 +85,10 @@ int main(int argc, char** argv) {
         } else{
           pixels[indx].colors[k] = pixels[indx].colors[k] | 1;
         }
-        // printf("%d", binarr[itt]);
         itt++;
       }
     }
   }
-  // printf("\n");
 
   write_ppm(outFname, pixels, width, height);
 
