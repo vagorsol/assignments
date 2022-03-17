@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   printf("Max number of characters in the image: %d\n", maxchar);
 
   int *secretchar;
-  secretchar = malloc(sizeof(int) * maxchar * 8);
+  secretchar = malloc(sizeof(int) * ((maxchar * 8) + 333));
   if(secretchar == NULL){
     printf("ERROR: unable to write secret message!\n");
     exit(1);
