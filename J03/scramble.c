@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 unsigned char scramble(char input){
   unsigned int bit1 = input & 0x8;
@@ -20,12 +21,15 @@ int main() {
   printf("Please enter a phrase: ");
   scanf(" %s", input);
   
-  unsigned char output[100];  
+  char* output;
+  output = calloc(sizeof(char) * strlen(input), strlen(input) + 1);  
   // loop through all the characters in the given string
   for(int i = 0; i < strlen(input); i++){
     output[i] = scramble(input[i]);  
     printf("%d", output[i]);
   }
   printf("scramble: %s\n", output);
+  free(output);
+  output = NULL;
   return 0;
 }
