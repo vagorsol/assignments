@@ -16,12 +16,12 @@ unsigned char scramble(char input){
 int main() {
   char input[100]; 
   printf("Please enter a phrase: ");
-  scanf(" %s", input);
+  fgets(input, 100, stdin);
   
   unsigned char* output;
   output = calloc(sizeof(unsigned char) * strlen(input), strlen(input) + 1);  
   // loop through all the characters in the given string
-  for(int i = 0; i < strlen(input); i++){
+  for(int i = 0; i < strlen(input) - 1; i++){
     output[i] = scramble(input[i]);  
   }
   printf("scramble: %s\n", output);
