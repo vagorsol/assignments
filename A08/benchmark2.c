@@ -24,11 +24,13 @@ int main ( int argc, char* argv[]) {
   printf("The initial top of the heap is %p.\n", init);
   for (int j = 0 ; j < ROUNDS; j++) {
     for (int i= 0 ; i < LOOP ; i++) {
-      int index = rand() % BUFFER;
+      int index = rand() % BUFFER; // pick a random index in the array
       if (buffer[index] != NULL) {
+        // if there is something allocated at that point, free it
         free(buffer[index]);
         buffer[index] = NULL;
       } else {
+        // otherwise, insert a randomly-sized block of memory
         size_t size = (size_t) randExp(8, 4000); 
         int *memory = NULL;
         memory = malloc(size);
@@ -37,11 +39,11 @@ int main ( int argc, char* argv[]) {
           fprintf(stderr, "malloc failed\n");
           return(1);
         } 
-        *memory = 123;
-        buffer[index] = memory;
+        *memory = 123; // put the value 123 in memory, regardless of the size
+        buffer[index] = memory; // set buffer[index] to that
       }
     }
-    fragstats(buffer, BUFFER);
+    fragstats(buffer, BUFFER); // get stats
     current = sbrk(0);
     int allocated = (int) ((current - init) / 1024);
     printf("%d\n" , j);

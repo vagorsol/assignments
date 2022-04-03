@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include "rand.h"
 
-#define ROUNDS 10
+#define ROUNDS 1000
 #define LOOP 100000
 
 int main (int argc, char* argv[]) {
@@ -23,7 +23,7 @@ int main (int argc, char* argv[]) {
         fprintf(stderr, "malloc failed\n");
         return(1);
       } 
-      *memory = 123;
+      // *memory = 123;
       free(memory);
     }
     current = sbrk(0);
