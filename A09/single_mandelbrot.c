@@ -14,7 +14,7 @@
 #include <string.h>
 
 int main(int argc, char* argv[]) {
-  int size = 480; // this value is the one that changes
+  int size = 400; // this value is the one that changes
   float xmin = -2.0;
   float xmax = 0.47;
   float ymin = -1.12;
@@ -69,8 +69,8 @@ int main(int argc, char* argv[]) {
   // compute image
   for(int row = 0; row < size; row++){
     for(int col = 0; col < size; col++){
-      float xfrac = (float) row / size;
-      float yfrac = (float) col / size;
+      float xfrac = (float) col / size;
+      float yfrac = (float) row / size;
       float x0 = xmin + (xfrac * (float) (xmax - xmin));
       float y0 = ymin + (yfrac * (float) (ymax - ymin));
 
@@ -78,10 +78,6 @@ int main(int argc, char* argv[]) {
       float y = 0.0;
       int itt = 0;
 
-      // looked up mandelbrot set on wikipedia while debugging. it says its <= 4
-      // and it doesn't seem to make a significant change so it stays this way
-      // for Some Reason my mandelbrot is rotated 90 clockwise from the site example
-      // probably some math error. maybe I'll fix it later. 
       while((itt < maxIterations) && (x*x + y*y <= 4)){
         float xtemp = x*x - y*y + x0;
         y = 2*x*y + y0;
