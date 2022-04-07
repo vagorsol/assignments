@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     palette[i].colors[2] = rand() % 255;
   }
 
-  // start time (excluding reading(?) image)
+  // start time
   struct timeval tstart, tend; 
   gettimeofday(&tstart, NULL);
 
@@ -121,12 +121,6 @@ int main(int argc, char* argv[]) {
   }
 
   sprintf(outFname,"%s%d%s%d%s", "madelbrot-", size, "-", timestamp, ".ppm");
-
-  for(int i = 0; i < size; i++){
-    for(int j = 0; j < size; j++){
-      int indx = i * size + j;
-    }
-  }
 
   // write file
   write_ppm(outFname, pixels, size, size);
