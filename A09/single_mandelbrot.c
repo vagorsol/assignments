@@ -14,7 +14,7 @@
 #include <string.h>
 
 int main(int argc, char* argv[]) {
-  int size = 2000; // this value is the one that changes
+  int size = 480; // this value is the one that changes
   float xmin = -2.0;
   float xmax = 0.47;
   float ymin = -1.12;
