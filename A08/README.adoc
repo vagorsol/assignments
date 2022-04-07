@@ -40,64 +40,125 @@ is allocated than what is needed. External fragmentation is when a chunk of memo
 across several places because there is not one continuous chunk of memory big enough to store it.
 
 `Output`
+
 ``The initial top of the heap is 0x7fce5b142000.
+
 Total Blocks: 200        Free:  174      Used: 26
+
 Internal Unused          Total: 178682   Average: 3080.7         Smallest: 511   Largest: 3906
+
 External Unused          Total: 144345   Average: 1401.4         Smallest: 10    Largest: 3984
+
 0
+
 The current top of the heap is 0x7fce5b198527.
+
 Increased by 345 (0x159) Kbyte
+
 Total Blocks: 191        Free:  155      Used: 36
+
 Internal Unused          Total: 159454   Average: 2952.9         Smallest: 107   Largest: 3130
+
 External Unused          Total: 177549   Average: 1571.2         Smallest: 10    Largest: 3984
+
 1
+
 The current top of the heap is 0x7fce5b19e327.
+
 Increased by 368 (0x170) Kbyte
+
 Total Blocks: 188        Free:  153      Used: 34
+
 Internal Unused          Total: 157088   Average: 3020.9         Smallest: 129   Largest: 3799
+
 External Unused          Total: 189341   Average: 1618.3         Smallest: 10    Largest: 3997
+
 2
+
 The current top of the heap is 0x7fce5b1a0282.
+
 Increased by 376 (0x178) Kbyte
+
 Total Blocks: 188        Free:  156      Used: 31
+
 Internal Unused          Total: 160672   Average: 3089.8         Smallest: 146   Largest: 2575
+
 External Unused          Total: 201235   Average: 1677.0         Smallest: 10    Largest: 3998
+
 3
+
 The current top of the heap is 0x7fce5b1a3188.
+
 Increased by 388 (0x184) Kbyte
+
 Total Blocks: 179        Free:  142      Used: 36
+
 Internal Unused          Total: 145974   Average: 2919.5         Smallest: 6     Largest: 3891
+
 External Unused          Total: 222205   Average: 1777.6         Smallest: 10    Largest: 3999
+
 4
+
 The current top of the heap is 0x7fce5b1a6095.
+
 Increased by 400 (0x190) Kbyte
+
 Total Blocks: 215        Free:  187      Used: 28
+
 Internal Unused          Total: 191611   Average: 3193.5         Smallest: 984   Largest: 3971
+
 External Unused          Total: 189140   Average: 1630.5         Smallest: 10    Largest: 3999
+
 5
+
 The current top of the heap is 0x7fce5b1a7045.
+
 Increased by 404 (0x194) Kbyte
+
 Total Blocks: 178        Free:  149      Used: 28
+
 Internal Unused          Total: 153391   Average: 3195.6         Smallest: 381   Largest: 2370
+
 External Unused          Total: 227231   Average: 1775.2         Smallest: 10    Largest: 4000
+
 6
+
 The current top of the heap is 0x7fce5b1a7045.
+
 Increased by 404 (0x194) Kbyte
+
 Total Blocks: 189        Free:  151      Used: 38
+
 Internal Unused          Total: 154837   Average: 2977.6         Smallest: 138   Largest: 2062
+
 External Unused          Total: 219943   Average: 1759.5         Smallest: 10    Largest: 3999
+
 7
+
 The current top of the heap is 0x7fce5b1a7ff5.
+
 Increased by 407 (0x197) Kbyte
+
 Total Blocks: 218        Free:  188      Used: 30
+
 Internal Unused          Total: 193404   Average: 3223.4         Smallest: 401   Largest: 2698
+
 External Unused          Total: 193697   Average: 1641.5         Smallest: 10    Largest: 4000
+
 8
+
 The current top of the heap is 0x7fce5b1a8fa5.
+
 Increased by 411 (0x19b) Kbyte
+
 Total Blocks: 176        Free:  146      Used: 29
+
 Internal Unused          Total: 150237   Average: 3129.9         Smallest: 636   Largest: 3789
+
 External Unused          Total: 237661   Average: 1828.2         Smallest: 10    Largest: 4000
+
 9
+
 The current top of the heap is 0x7fce5b1a8fa5.
+
 Increased by 411 (0x19b) Kbyte``
