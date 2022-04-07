@@ -1,3 +1,10 @@
+/**
+ * single_mandelbrot.c
+ * Author: Audrey Yang
+ * Date: 4/7/2022
+ * Creats fractals based on the mandelbrot set
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,7 +14,7 @@
 #include <string.h>
 
 int main(int argc, char* argv[]) {
-  int size = 480; // this value is the one that changes
+  int size = 2000; // this value is the one that changes
   float xmin = -2.0;
   float xmax = 0.47;
   float ymin = -1.12;
@@ -40,7 +47,7 @@ int main(int argc, char* argv[]) {
   }
 
   struct ppm_pixel color;
-  struct ppm_pixel *palette; // size is ??? sizeof image size??
+  struct ppm_pixel *palette; 
   
   palette = malloc(sizeof(struct ppm_pixel) * maxIterations);
   if(palette == NULL){
@@ -71,33 +78,27 @@ int main(int argc, char* argv[]) {
       float y = 0.0;
       int itt = 0;
 
-      // looked up mandelbrot algorithm on wikipedia while debugging. it says its <= 4
+      // looked up mandelbrot set on wikipedia while debugging. it says its <= 4
       // and it doesn't seem to make a significant change so it stays this way
       // for Some Reason my mandelbrot is rotated 90 clockwise from the site example
-      // probably some math error. maybe I'll fix it later.
-      // printf("x0: %f y0: %f\n", x0, y0);
+      // probably some math error. maybe I'll fix it later. 
       while((itt < maxIterations) && (x*x + y*y <= 4)){
         float xtemp = x*x - y*y + x0;
-        // printf("xtemp: %f x: %f\n", xtemp, x);
         y = 2*x*y + y0;
         x = xtemp; 
         itt++;
-        // printf("x: %f y: %f \n", x, y);
         float ret = x*x + y*y; 
-        // printf("itt %d && %f\n", itt, ret);
       }
       if(itt < maxIterations){
         // escaped - get color
         color.colors[0] = palette[itt].colors[0];
         color.colors[1] = palette[itt].colors[1];
         color.colors[2] = palette[itt].colors[2];
-        // printf("R: %d B: %d G: %d\n", color.colors[0], color.colors[1], color.colors[2]);
       } else{
         // didn't escape - set color to black
         color.colors[0] = 0; 
         color.colors[1] = 0;
         color.colors[2] = 0; 
-        // printf("black\n");
       }
 
       // write color to image at loc
@@ -115,9 +116,9 @@ int main(int argc, char* argv[]) {
 
   // make the file name
   char *outFname = NULL;
-  int timestamp = time(0); // check if this is right
+  int timestamp = time(0); 
   int outsize = sizeof("madelbrot") + sizeof(size) + 17;
-  outFname = calloc(outsize + 2, sizeof(char)); // 10 + sizeof(size) + sizeof(timestamp) + 7
+  outFname = calloc(outsize + 2, sizeof(char)); 
   if(outFname == NULL){
     printf("ERROR: unable to write a file name!\n");
     exit(1);
@@ -128,9 +129,9 @@ int main(int argc, char* argv[]) {
   for(int i = 0; i < size; i++){
     for(int j = 0; j < size; j++){
       int indx = i * size + j;
-      // printf("R: %d B: %d G: %d\n", pixels[indx].colors[0], pixels[indx].colors[1], pixels[indx].colors[2]);
     }
   }
+
   // write file
   write_ppm(outFname, pixels, size, size);
 
