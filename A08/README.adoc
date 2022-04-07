@@ -41,7 +41,7 @@ across several places because there is not one continuous chunk of memory big en
 
 `Output`
 
-``The initial top of the heap is 0x7fce5b142000.
+The initial top of the heap is 0x7fce5b142000.
 
 Total Blocks: 200        Free:  174      Used: 26
 
@@ -161,4 +161,4 @@ External Unused          Total: 237661   Average: 1828.2         Smallest: 10   
 
 The current top of the heap is 0x7fce5b1a8fa5.
 
-Increased by 411 (0x19b) Kbyte``
+Increased by 411 (0x19b) Kbyte
