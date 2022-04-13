@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
   gettimeofday(&tend, NULL);
   double timer = tend.tv_sec - tstart.tv_sec + (tend.tv_usec + tstart.tv_usec) / 1.e6;
 
-  printf("Computer madelbrot set (%dx%d) in %.6f seconds\n", size, size, timer);
+  printf("Computed madelbrot set (%dx%d) in %.6f seconds\n", size, size, timer);
 
   // make the file name
   char *outFname = NULL;
