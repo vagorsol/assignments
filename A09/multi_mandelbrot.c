@@ -17,7 +17,7 @@
 #include "read_ppm.h"
 
 int main(int argc, char* argv[]) {
-  int size = 2000;
+  int size = 400;
   float xmin = -2.0;
   float xmax = 0.47;
   float ymin = -1.12;
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
     palette[i].colors[1] = rand() % 255;
     palette[i].colors[2] = rand() % 255;
   }
-
+  
   // start time 
   struct timeval tstart, tend; 
   gettimeofday(&tstart, NULL);
@@ -92,11 +92,7 @@ int main(int argc, char* argv[]) {
       }
       int ppid = getpid();
       printf("%d) Sub-image block: cols (%d, %d) to rows (%d, %d)\n", 
-                  ppid,
-                  colBot,
-                  colTop,
-                  rowBot,
-                  rowTop);
+                  ppid, colBot, colTop, rowBot, rowTop);
       // compute image
       for(int row = rowBot; row < rowTop; row++){
         for(int col = colBot; col < colTop; col++){
@@ -134,6 +130,8 @@ int main(int argc, char* argv[]) {
           pixels[row * size + col].colors[2] = color.colors[2];
         }
       }
+      free(palette);
+      palette = NULL;
       exit(0);
     } else {
       printf("Launched child process: %d\n", pid);
@@ -168,8 +166,6 @@ int main(int argc, char* argv[]) {
 
   printf("Writing file: %s\n", outFname);
 
-  // note to self: ask about "still reachable" memory in leaks check 
-  // also the "2 allocs 1 free" even though at end it says "6 allocs 6 frees"
   free(outFname);
   outFname = NULL;
   free(palette);
