@@ -57,8 +57,8 @@ void write_ppm(const char* filename, struct ppm_pixel* pixels, int w, int h) {
   sprintf(arrsize,"%d %d\n", w, h);
   char maxpixval[] = "225\n";
   fwrite(filetype, sizeof(filetype) - 1, 1, infile);
-  fwrite(arrsize, sizeof(arrsize), 1, infile);
-  fwrite(maxpixval, sizeof(maxpixval) - 1, 1, infile); 
+  fwrite(arrsize, strlen(arrsize), 1, infile);
+  fwrite(maxpixval, strlen(maxpixval), 1, infile); 
   
   // add the pixels
   fwrite(pixels, sizeof(struct ppm_pixel), w * h, infile);
