@@ -16,8 +16,8 @@ In `simple.c` (print.c), where does the increase in 1040 bytes come from?
 Why is the value 1040 bytes?
 
 The increase in 1040 bytes comes from the heap. 
-The value is 1040 bytes because allocates 1024 bytes (1 GB) - the additional 16 
-bytes comes from the print statment (which takes up memory as well).
+The value is 1040 bytes because allocates 1024 bytes (1 MB) - the additional 16 
+bytes comes from the the chunk header (which takes up memory as well).
 
 How many bytes does `mylloc_list.c` allocate (in reallocate.c) when the program ends? 
 Explain why this amount makes sense.
@@ -28,16 +28,19 @@ bytes in all.
 
 When using the malloc from `mylloc_list.c`, if there was not a print statement before the byte calculation was made, the reported result was 116 bytes. When a print statement 
 was added (whether in the loop or not), the reported result was 1156 GB. After some math, this result makes sense 
-as 1156 - 116 = 1040. In `print.c` it was shown that simply calling sbrk() allocates 1024 bytes (the additional 16 bytes). And from the 116 bytes, 16 are from print statements
-and the other 100 are from mallocing and freeing. The 16 other bytes allocated by calling sbrk() are also from print statements or buffering. 
-I am not sure why the 1156/116 print statement discrepancy exists.
+as 1156 - 1024 = 132. 
+
+In `print.c` it was shown that simply calling sbrk() allocates 1024 bytes (the additional 16 bytes). And from the 132 bytes, 32 of them are for the chunk headers(there are two chunk headers).
+and the other 100 are from mallocing and freeing. 
+
+I am not sure why the 1156/116 chunk header discrepancy exists.
 
 = Fragementation
 What is fragmentation? What is the difference between internal and external fragmentation?
 
-Fragmentation is when memory is used inefficiently. Internal fragmentation is when more memory 
-is allocated than what is needed. External fragmentation is when a chunk of memory has to be stored 
-across several places because there is not one continuous chunk of memory big enough to store it.
+Fragmentation is when memory is used inefficiently by having memory interdispersed in small and broken up chunks. 
+Internal fragmentation is when more memory is allocated than what is needed. 
+External fragmentation is when a chunk of memory has to be stored across several places because there is not one continuous chunk of memory big enough to store it.
 
 `Output`
 
