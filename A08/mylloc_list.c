@@ -112,8 +112,8 @@ void fragstats(void* buffers[], int len) {
     next = next ->next;
   }
 
-  externAvg = (float) externTotal / externCount;
-  internAvg = (float) internTotal / internCount; 
+  externAvg = (float) (externTotal / externCount);
+  internAvg = (float) (internTotal / internCount); 
 
   printf("Total Blocks: %d\t Free:  %d \t Used: %d\n", 
           totalBlocks,
