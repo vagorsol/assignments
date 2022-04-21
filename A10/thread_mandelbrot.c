@@ -56,8 +56,7 @@ void *mandelbot(void* args){
         float xtemp = x*x - y*y + x0;
         y = 2*x*y + y0;
         x = xtemp; 
-        itt++;
-        float ret = x*x + y*y; 
+        itt++; 
       }
       if(itt < vals->maxIterations){
         // escaped - get color
