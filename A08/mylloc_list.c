@@ -65,8 +65,7 @@ void free(void *memory) {
  */
 void fragstats(void* buffers[], int len) {
   // get size of element with: 
-  int totalBlocks = 0;
-  int totalUsed = 0;
+  int totalUsed = 0, totalFree = 0;
   int internTotal = 0, internSmall = 0, internLarge = 0, internCount = 0; // used
   int externTotal = 0, externSmall = 0, externLarge = 0, externCount = 0; // freed
   float internAvg, externAvg;
@@ -75,8 +74,7 @@ void fragstats(void* buffers[], int len) {
     if(buffers[i] != NULL){
       struct chunk *cnk = (struct chunk*) ((struct chunk*) buffers[i] - 1);
 
-      totalBlocks = totalBlocks + cnk->size; 
-      totalUsed = totalUsed + cnk->used; 
+      totalUsed++; 
 
       // used memory
       if(cnk->used < cnk->size){
@@ -84,23 +82,19 @@ void fragstats(void* buffers[], int len) {
         if(unusedSize < internSmall || (internSmall == 0 && unusedSize != 0)){
           internSmall = unusedSize;
         }
-        if(cnk->used > internLarge){
+        if(unusedSize > internLarge){
           internLarge = unusedSize;
         }
         internTotal = internTotal + unusedSize;
-        internCount++;
       }
+      internCount++;
     }
   }
-
-  // int casting and divide by 1024 because units
-  int totalFree = (int) ((totalBlocks - totalUsed) / 1024);
-  totalBlocks = (int) (totalBlocks / 1024);
-  totalUsed = (int) (totalUsed / 1024);
 
   // freed memory
   struct chunk *next = flist; 
   while(next != NULL){
+    totalFree++;
     if(next->size < externSmall || (externSmall == 0 && next->size != 0)){
       externSmall = next->size;
     }
@@ -112,6 +106,7 @@ void fragstats(void* buffers[], int len) {
     next = next ->next;
   }
 
+  int totalBlocks = totalFree + totalUsed;
   externAvg = (float) (externTotal / externCount);
   internAvg = (float) (internTotal / internCount); 
 
