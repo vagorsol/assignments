@@ -1,3 +1,10 @@
+/**
+ * thread_mandelbrot.c
+ * Author: Audrey Yang
+ * Date: 4/20/2022
+ * Creats fractals based on the mandelbrot set
+ * using threads.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
