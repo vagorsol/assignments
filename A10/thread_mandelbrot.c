@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
   struct ppm_pixel *pixels; //image to write
   pixels = malloc(sizeof(struct ppm_pixel) * image_size);
   if(pixels == NULL){
-    printf("ERROR: unable to allocate memory to make madelbrot.\n");
+    printf("ERROR: unable to allocate memory to make mandelbrot.\n");
     exit(1);
   }
 
@@ -174,19 +174,19 @@ int main(int argc, char* argv[]) {
   gettimeofday(&tend, NULL);
   double timer = tend.tv_sec - tstart.tv_sec + (tend.tv_usec + tstart.tv_usec) / 1.e6;
 
-  printf("Computed madelbrot set (%dx%d) in %.6f seconds\n", size, size, timer);
+  printf("Computed mandelbrot set (%dx%d) in %.6f seconds\n", size, size, timer);
 
   // make the file name
   char *outFname = NULL;
   int timestamp = time(0); 
-  int outsize = sizeof("madelbrot") + sizeof(size) + 17;
+  int outsize = sizeof("mandelbrot") + sizeof(size) + 17;
   outFname = calloc(outsize + 2, sizeof(char)); 
   if(outFname == NULL){
     printf("ERROR: unable to write a file name!\n");
     exit(1);
   }
 
-  sprintf(outFname,"%s%d%s%d%s", "madelbrot-", size, "-", timestamp, ".ppm");
+  sprintf(outFname,"%s%d%s%d%s", "mandelbrot-", size, "-", timestamp, ".ppm");
 
   // write file
   write_ppm(outFname, pixels, size, size);
