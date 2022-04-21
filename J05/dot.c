@@ -7,23 +7,24 @@
 #define SIZE 100000
 
 pthread_mutex_t mutex;
+static int dotprodthreaded = 0;
 
 struct thread_args{
   int min;
   int max;
   int* v;
-  int* u;
-  int* dotproduct; 
+  int* u; 
 };
 
 void *dotbot(void* args){
   struct thread_args *vals = args;
-
+  int ret = 0;
   for(int i = vals->min; i < vals->max; i++){
-    pthread_mutex_lock(&mutex);
-    vals->dotproduct += vals->u[i] * vals->v[i];
-    pthread_mutex_unlock(&mutex);
+    ret += vals->u[i] * vals->v[i];
   }
+  pthread_mutex_lock(&mutex);
+  dotprodthreaded += ret;
+  pthread_mutex_unlock(&mutex);
   return (void *)0;
 }
 
@@ -51,7 +52,6 @@ int main(int argc, char *argv[]) {
     args[i].max = (SIZE / 4) + (SIZE / 4) * i;
     args[i].u = u;
     args[i].v = v;
-    args[i].dotproduct = &dotproduct; 
     pthread_create(&threads[i], NULL, dotbot, &args[i]);
   }
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     pthread_join(threads[i], NULL);
   }
   printf("Test with 4 threads\n");
-  printf("Answer with threads: %d\n", dotproduct);
+  printf("Answer with threads: %d\n", dotprodthreaded);
   pthread_mutex_destroy(&mutex);
   return 0;
 }
