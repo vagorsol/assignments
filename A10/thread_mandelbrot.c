@@ -2,7 +2,7 @@
  * thread_mandelbrot.c
  * Author: Audrey Yang
  * Date: 4/20/2022
- * Creats fractals based on the mandelbrot set
+ * Creates fractals based on the mandelbrot set
  * using threads.
  */
 #include <stdio.h>
@@ -22,10 +22,10 @@ struct thread_args{
   int rowTop;
   int colBot;
   int colTop;
-  int xmin;
-  int xmax; 
-  int ymin;
-  int ymax;
+  float xmin;
+  float xmax; 
+  float ymin;
+  float ymax;
   int size;
   int maxIterations;
   struct ppm_pixel *pixels;
@@ -149,6 +149,7 @@ int main(int argc, char* argv[]) {
 
   pthread_mutex_init(&mutex, NULL);
   for(int i = 0; i < 4; i++){
+    // TODO: bounds are fucked
     // define params
     args[i].xmin = xmin;
     args[i].xmax = xmax;
