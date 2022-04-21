@@ -11,8 +11,8 @@ pthread_mutex_t mutex;
 struct thread_args{
   int min;
   int max;
-  int* v[SIZE];
-  int* u[SIZE];
+  int* v;
+  int* u;
   int* dotproduct; 
 };
 
@@ -20,10 +20,8 @@ void *dotbot(void* args){
   struct thread_args *vals = args;
 
   for(int i = vals->min; i < vals->max; i++){
-    // printf("Bob: %d %d %d \n",i, vals->min, vals->max);
-    // printf("Values: %d %d\n", *vals->u[i], *vals->v[i]);
     pthread_mutex_lock(&mutex);
-    vals->dotproduct += *vals->u[i] * *vals->v[i];
+    vals->dotproduct += vals->u[i] * vals->v[i];
     pthread_mutex_unlock(&mutex);
   }
   return (void *)0;
@@ -43,17 +41,16 @@ int main(int argc, char *argv[]) {
   }
   printf("Ground truth dot product: %d\n", dotproduct);
 
-  // TODO: Implement your thread solution here
   pthread_t threads[4];
   struct thread_args args[4];
 
   dotproduct = 0;
+  pthread_mutex_init(&mutex, NULL);
   for(int i = 0; i < 4; i++){
     args[i].min = (SIZE / 4) * i;
     args[i].max = (SIZE / 4) + (SIZE / 4) * i;
-    // printf("%d %d", args[i].min, args[i].max);
-    *args[i].u = u;
-    *args[i].v = v;
+    args[i].u = u;
+    args[i].v = v;
     args[i].dotproduct = &dotproduct; 
     pthread_create(&threads[i], NULL, dotbot, &args[i]);
   }
