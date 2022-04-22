@@ -80,7 +80,7 @@ void* buddahbot(void* args){
   // compute visited counts
   for(int row = vals->rowBot; row < vals->rowTop; row++){
     for(int col = vals->colBot; col < vals->colTop; col++){
-      if(vals->mandelship[row * vals->size + col]){
+      if(vals->mandelship[row * vals->size + col] == 0){
         float xfrac = (float) col / vals->size;
         float yfrac = (float) row / vals->size;
         float x0 = vals->xmin + (xfrac * (float) (vals->xmax - vals->xmin));
@@ -101,12 +101,10 @@ void* buddahbot(void* args){
           if(xcol < 0 || xcol >= vals->size) continue; // out of range
           
           pthread_mutex_lock(&mutex);
-          // TODO: if output looks weird this is the error (swap xcol/yrow)
-          // printf("yrow: %d xcol: %d\n", yrow, xcol);
           vals->mandelcounts[yrow * vals->size + xcol] += 1;
           max_count += 1;
           pthread_mutex_unlock(&mutex);
-          printf("%d\n", max_count);
+          // printf("%d\n", max_count);
         } 
       }
     }
@@ -116,15 +114,15 @@ void* buddahbot(void* args){
   pthread_barrier_wait(&barrier);
 
   // compute colors
-  float gamma = 0.681;
-  float factor = 1.0 / gamma; 
+  double gamma = 0.681;
+  double factor = 1.0 / gamma; 
 
   for(int row = vals->rowBot; row < vals->rowTop; row++){
     for(int col = vals->colBot; col < vals->colTop; col++){
-      float value = 0;
+      double value = 0;
 
       if(vals->mandelcounts[row * vals->size + col] > 0){
-        value = log(vals->mandelcounts[row * vals->size + col]) / log(max_count);
+        value = log((double) vals->mandelcounts[row * vals->size + col]) / log((double) max_count);
         value = pow(value, factor);
       }
 
@@ -141,7 +139,7 @@ void* buddahbot(void* args){
 }
 
 int main(int argc, char* argv[]) {
-  int size = 4;
+  int size = 480;
   float xmin = -2.5;
   float xmax = 1;
   float ymin = -1.12;
