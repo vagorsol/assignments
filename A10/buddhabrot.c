@@ -32,7 +32,6 @@ struct thread_args{
   int *mandelship;
   int *mandelcounts;
   struct ppm_pixel *pixels;
-  struct ppm_pixel *palette;
 };
 
 pthread_mutex_t mutex;
@@ -57,7 +56,7 @@ void* buddahbot(void* args){
       float y = 0.0;
       int itt = 0;
 
-      while((itt < vals->maxIterations) && (x*x + y*y <= 4)){
+      while((itt < vals->maxIterations) && (x*x + y*y < 4)){
         float xtemp = x*x - y*y + x0;
         y = 2*x*y + y0;
         x = xtemp; 
@@ -81,39 +80,39 @@ void* buddahbot(void* args){
   // compute visited counts
   for(int row = vals->rowBot; row < vals->rowTop; row++){
     for(int col = vals->colBot; col < vals->colTop; col++){
-      // this might should be if mandelship == 0
-      if(vals->mandelship[row * vals->size + col] == 0){
-        float xfrac = col / vals->size;
-        float yfrac = row / vals->size;
-        float x0 = vals->xmin + xfrac * (vals->xmax - vals->xmin);
-        float y0 = vals->ymin + yfrac * (vals->ymax - vals->ymin);
+      if(vals->mandelship[row * vals->size + col]){
+        float xfrac = (float) col / vals->size;
+        float yfrac = (float) row / vals->size;
+        float x0 = vals->xmin + (xfrac * (float) (vals->xmax - vals->xmin));
+        float y0 = vals->ymin + (yfrac * (float) (vals->ymax - vals->ymin));
 
         float x = 0.0;
         float y = 0.0;
-        int max = 0;
 
-        while(x*x + y*y <= 4){
-          // TODO: values are only 0
+        while(x*x + y*y < 4){
           float xtemp = x*x - y*y + x0;
           y = 2*x*y + y0;
           x = xtemp; 
 
           int yrow = round(vals->size * ((y - vals->ymin)/(vals->ymax - vals->ymin)));
           int xcol = round(vals->size * ((x - vals->xmin)/(vals->xmax - vals->xmin)));
-
-          if(yrow < 0 || yrow >= vals->size) continue;
-          if(xcol < 0 || xcol >= vals->size) continue;
-          printf("yrow: %d xcol: %d\n", yrow, xcol);
+          
+          if(yrow < 0 || yrow >= vals->size) continue; // out of range
+          if(xcol < 0 || xcol >= vals->size) continue; // out of range
+          
           pthread_mutex_lock(&mutex);
+          // TODO: if output looks weird this is the error (swap xcol/yrow)
+          // printf("yrow: %d xcol: %d\n", yrow, xcol);
           vals->mandelcounts[yrow * vals->size + xcol] += 1;
           max_count += 1;
           pthread_mutex_unlock(&mutex);
+          printf("%d\n", max_count);
         } 
       }
     }
   }
   
-  // WAIT (pthread_barrier_t)
+  // wait
   pthread_barrier_wait(&barrier);
 
   // compute colors
@@ -125,13 +124,11 @@ void* buddahbot(void* args){
       float value = 0;
 
       if(vals->mandelcounts[row * vals->size + col] > 0){
-        printf("Mandelcount at (%d, %d) is: %d\n", row, col, vals->mandelcounts[row * vals->size + col]);
         value = log(vals->mandelcounts[row * vals->size + col]) / log(max_count);
         value = pow(value, factor);
       }
 
       pthread_mutex_lock(&mutex);
-      // printf("Color at (%d, %d) is: %f\n", row, col, value * 255);
       vals->pixels[row * vals->size + col].red = value * 255;
       vals->pixels[row * vals->size + col].green = value * 255;
       vals->pixels[row * vals->size + col].blue = value * 255;
@@ -144,7 +141,7 @@ void* buddahbot(void* args){
 }
 
 int main(int argc, char* argv[]) {
-  int size = 480;
+  int size = 4;
   float xmin = -2.5;
   float xmax = 1;
   float ymin = -1.12;
@@ -179,17 +176,11 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  struct ppm_pixel color;
-  struct ppm_pixel *palette; 
+  struct ppm_pixel color; 
   int *mandelship; // is the point in the mandelbrot
   int *mandelcounts; // amount of visits
 
-  palette = malloc(sizeof(struct ppm_pixel) * maxIterations);
-  if(palette == NULL){
-    printf("ERROR: unable to generate a palette.\n");
-    exit(1);
-  }
-  mandelship = malloc(sizeof(int) * image_size);
+  mandelship = calloc(image_size, sizeof(int));
   if(mandelship == NULL){
     printf("ERROR: unable to allocate memory for an array.\n");
     exit(1);
@@ -198,13 +189,6 @@ int main(int argc, char* argv[]) {
   if(mandelcounts == NULL){
     printf("ERROR: unable to allocate memory for an array.\n");
     exit(1);
-  }
-
-  // generate palette
-  for(int i = 0; i < maxIterations; i++){
-    palette[i].colors[0] = rand() % 255;
-    palette[i].colors[1] = rand() % 255;
-    palette[i].colors[2] = rand() % 255;
   }
 
   pthread_t threads[4];
@@ -228,7 +212,6 @@ int main(int argc, char* argv[]) {
     args[i].size = size;
     args[i].maxIterations = maxIterations;
     args[i].pixels = pixels;
-    args[i].palette = palette;
     args[i].mandelship = mandelship;
     args[i].mandelcounts = mandelcounts;
     switch(i){
@@ -271,8 +254,6 @@ int main(int argc, char* argv[]) {
   outFname = NULL;
   free(pixels);
   pixels = NULL;
-  free(palette);
-  palette = NULL;
   free(mandelcounts);
   mandelcounts = NULL;
   free(mandelship);
