@@ -148,7 +148,6 @@ int main(int argc, char* argv[]) {
 
   pthread_mutex_init(&mutex, NULL);
   for(int i = 0; i < 4; i++){
-    // TODO: bounds are fucked
     // define params
     args[i].xmin = xmin;
     args[i].xmax = xmax;
