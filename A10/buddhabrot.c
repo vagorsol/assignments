@@ -38,9 +38,9 @@ pthread_mutex_t mutex;
 pthread_barrier_t barrier; 
 static int max_count = 0;
 
-void* buddahbot(void* args){
+// TODO: buddhabrot output still incorrect
+void* buddhabot(void* args){
   struct thread_args *vals = args;
-  struct ppm_pixel color;
 
   printf("Thread %lu) sub-image block: cols(%d, %d) to rows (%d, %d)\n",
           pthread_self(), vals->rowBot, vals->rowTop, vals->colBot, vals->colTop);
@@ -49,14 +49,14 @@ void* buddahbot(void* args){
     for(int col = vals->colBot; col < vals->colTop; col++){
       float xfrac = (float) col / vals->size;
       float yfrac = (float) row / vals->size;
-      float x0 = vals->xmin + (xfrac * (float) (vals->xmax - vals->xmin));
-      float y0 = vals->ymin + (yfrac * (float) (vals->ymax - vals->ymin));
+      float x0 = (float) vals->xmin + (xfrac * (float) (vals->xmax - vals->xmin));
+      float y0 = (float) vals->ymin + (yfrac * (float) (vals->ymax - vals->ymin));
 
       float x = 0.0;
       float y = 0.0;
       int itt = 0;
 
-      while((itt < vals->maxIterations) && (x*x + y*y < 4)){
+      while((itt < vals->maxIterations) && (x*x + y*y <= 4)){
         float xtemp = x*x - y*y + x0;
         y = 2*x*y + y0;
         x = xtemp; 
@@ -83,26 +83,28 @@ void* buddahbot(void* args){
       if(vals->mandelship[row * vals->size + col] == 0){
         float xfrac = (float) col / vals->size;
         float yfrac = (float) row / vals->size;
-        float x0 = vals->xmin + (xfrac * (float) (vals->xmax - vals->xmin));
-        float y0 = vals->ymin + (yfrac * (float) (vals->ymax - vals->ymin));
+        float x0 = (float) vals->xmin + (xfrac * (float) (vals->xmax - vals->xmin));
+        float y0 = (float) vals->ymin + (yfrac * (float) (vals->ymax - vals->ymin));
 
         float x = 0.0;
         float y = 0.0;
 
-        while(x*x + y*y < 4){
+        while(x*x + y*y <= 4){
           float xtemp = x*x - y*y + x0;
           y = 2*x*y + y0;
           x = xtemp; 
 
-          int yrow = round(vals->size * ((y - vals->ymin)/(vals->ymax - vals->ymin)));
-          int xcol = round(vals->size * ((x - vals->xmin)/(vals->xmax - vals->xmin)));
+          int yrow = round((vals->size * (y - vals->ymin))/(vals->ymax - vals->ymin));
+          int xcol = round((vals->size * (x - vals->xmin))/(vals->xmax - vals->xmin));
           
           if(yrow < 0 || yrow >= vals->size) continue; // out of range
           if(xcol < 0 || xcol >= vals->size) continue; // out of range
           
           pthread_mutex_lock(&mutex);
           vals->mandelcounts[yrow * vals->size + xcol] += 1;
-          max_count += 1;
+          if(vals->mandelcounts[yrow * vals->size + xcol] > max_count){
+            max_count += 1;
+          }
           pthread_mutex_unlock(&mutex);
           // printf("%d\n", max_count);
         } 
@@ -114,22 +116,20 @@ void* buddahbot(void* args){
   pthread_barrier_wait(&barrier);
 
   // compute colors
-  double gamma = 0.681;
-  double factor = 1.0 / gamma; 
-
+  double factor = 1.0 / 0.681; 
   for(int row = vals->rowBot; row < vals->rowTop; row++){
     for(int col = vals->colBot; col < vals->colTop; col++){
       double value = 0;
 
       if(vals->mandelcounts[row * vals->size + col] > 0){
-        value = log((double) vals->mandelcounts[row * vals->size + col]) / log((double) max_count);
+        value = (log((double) vals->mandelcounts[row * vals->size + col]) / log((double) max_count));
         value = pow(value, factor);
       }
 
       pthread_mutex_lock(&mutex);
-      vals->pixels[row * vals->size + col].red = value * 255;
-      vals->pixels[row * vals->size + col].green = value * 255;
-      vals->pixels[row * vals->size + col].blue = value * 255;
+      vals->pixels[row * vals->size + col].red = (int) (value * 255);
+      vals->pixels[row * vals->size + col].green = (int) (value * 255);
+      vals->pixels[row * vals->size + col].blue = (int) (value * 255);
       pthread_mutex_unlock(&mutex);
     }
   }
@@ -218,7 +218,7 @@ int main(int argc, char* argv[]) {
       case 2: args[i].colBot = 0; args[i].colTop = sizediv; args[i].rowBot = sizediv; args[i].rowTop = size; break;
       case 3: args[i].colBot = sizediv; args[i].colTop = size; args[i].rowBot = sizediv; args[i].rowTop = size; break;
     }
-    pthread_create(&threads[i], NULL, buddahbot, &args[i]);
+    pthread_create(&threads[i], NULL, buddhabot, &args[i]);
   }
 
   for(int i = 0; i < 4; i++){
